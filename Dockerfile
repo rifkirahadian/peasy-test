@@ -6,8 +6,11 @@ WORKDIR /var/www/html
 
 # Install PostgreSQL and Redis dependencies
 RUN apt-get update && apt-get install -y \
+    unzip \
     libpq-dev \
-    && docker-php-ext-install pdo_pgsql \
+    libzip-dev \
+    zip \
+    && docker-php-ext-install pdo_pgsql zip \
     && pecl install redis && docker-php-ext-enable redis
 
 # Install Composer

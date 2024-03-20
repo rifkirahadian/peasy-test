@@ -13,8 +13,13 @@ class UserRepository implements UserRepositoryInterface
         $this->model = $model;
     }
 
-    public function updateOrCreateUser($uuid, $data)
+    public function updateOrCreateUser($value)
     {
-        return $this->model->updateOrCreate(['uuid' => $uuid], $data);
+        return $this->model->updateOrCreate(['uuid' => $value['login']['uuid']], [
+            'Gender'    => $value['gender'],
+            'Name'      => $value['name'],
+            'Location'  => $value['location'],
+            'age'       => $value['dob']['age']
+        ]);
     }
 }

@@ -4,9 +4,12 @@ namespace App\Console\Commands;
 
 use App\Http\Services\ExternalApiService;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
-class RecordUser extends Command
+class RecordUserHourly extends Command
 {
     /**
      * The name and signature of the console command.
@@ -45,18 +48,23 @@ class RecordUser extends Command
     public function handle()
     {
         $users = $this->externalApiService->getRandomUser();
-        if ($users['results']) {
+        try {
+            DB::beginTransaction();
             foreach ($users['results'] as $key => $value) {
-                if ($value['login']) {
-                    $this->userRepository->updateOrCreateUser($value['login']['uuid'], [
-                        'Gender'    => $value['gender'],
-                        'Name'      => $value['name'],
-                        'Location'  => $value['location'],
-                        'age'       => $value['dob']['age']
-                    ]);
-                }
-                
+                $this->userRepository->updateOrCreateUser($value);
             }
+
+            $grouped_gender = collect($users['results'])->groupBy('gender')->all();
+            $male_count = array_key_exists('male', $grouped_gender) ? count($grouped_gender['male']) : 0;
+            $female_count = array_key_exists('female', $grouped_gender) ? count($grouped_gender['female']) : 0;
+
+            Redis::set('male:count', $male_count);
+            Redis::set('female:count', $female_count);
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
     }
 }
