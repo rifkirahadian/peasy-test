@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+
+  app:
+    build:
+      args:
+        user: root
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: peasy-test:production
+    container_name: peasy-test-production
+    restart: unless-stopped
+    working_dir: /var/www/
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/var/www
+    networks:
+      - peasy-test-production
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  peasy-test-production:
+    driver: bridge
