@@ -1,8 +1,8 @@
 <?php
 namespace App\Repositories\Interfaces;
 
-Interface UserRepositoryInterface{
-    
+Interface UserRepositoryInterface {
     public function updateOrCreateUser($value);
-    public function getUserByGender();
+    public function getUserCountByGender();
+    public function getAverageAgeUsersByGender();
 }

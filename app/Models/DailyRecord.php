@@ -10,6 +10,8 @@ class DailyRecord extends Model
     use HasFactory;
 
     protected $table = 'DailyRecord';
+    public $timestamps = false;
+    public $incrementing = false;
 
     protected $fillable = [
         'date',

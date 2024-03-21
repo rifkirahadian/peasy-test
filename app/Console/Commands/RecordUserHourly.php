@@ -7,6 +7,7 @@ use App\Repositories\Interfaces\UserRepositoryInterface;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 class RecordUserHourly extends Command
@@ -54,26 +55,19 @@ class RecordUserHourly extends Command
                 $this->userRepository->updateOrCreateUser($value);
             }
 
-            $grouped_gender = $this->userRepository->getUserByGender();
-            $male_count = 0;
-            $female_count = 0;
-            foreach ($grouped_gender as $value) {
-                if ($value->Gender === 'male') {
-                    $male_count = $value->count;
-                }
+            $grouped_gender = $this->userRepository->getUserCountByGender();
+            $male_count = collect($grouped_gender)->firstWhere('Gender', 'male');
+            $female_count = collect($grouped_gender)->firstWhere('Gender', 'female');
 
-                if ($value->Gender === 'female') {
-                    $female_count = $value->count;
-                }
-            }
-
-            Redis::set('male:count', $male_count);
-            Redis::set('female:count', $female_count);
+            Redis::set('male:count', $male_count ? $male_count->count : 0);
+            Redis::set('female:count', $female_count ? $female_count->count : 0);
 
             DB::commit();
+            Log::info('Record user success');
         } catch (Exception $e) {
             DB::rollBack();
-            throw $e;
+            $errorMessage = $e->getMessage();
+            Log::error("user:record|error|$errorMessage");
         }
     }
 }

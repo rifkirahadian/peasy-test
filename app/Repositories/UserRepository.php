@@ -24,8 +24,13 @@ class UserRepository implements UserRepositoryInterface
         ]);
     }
 
-    public function getUserByGender()
+    public function getUserCountByGender()
     {
         return $this->model->select('Gender', DB::raw('count(*) as count'))->groupBy('Gender')->get();
+    }
+
+    public function getAverageAgeUsersByGender()
+    {
+        return $this->model->select('Gender', DB::raw('avg(age) as avg_age'))->groupBy('Gender')->get();
     }
 }

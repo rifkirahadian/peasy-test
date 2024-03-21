@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('Gender');
             $table->json('Name');
             $table->json('Location');
-            $table->json('age');
+            $table->integer('age');
         });
     }
 
