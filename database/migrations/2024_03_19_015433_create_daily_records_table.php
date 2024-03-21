@@ -14,11 +14,13 @@ class CreateDailyRecordsTable extends Migration
     public function up()
     {
         Schema::create('DailyRecord', function (Blueprint $table) {
+            $table->id();
             $table->date('date');
             $table->integer('male_count');
             $table->integer('female_count');
             $table->double('male_avg_age');
             $table->double('female_avg_age');
+            $table->timestampsTz();
         });
     }
 
