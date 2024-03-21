@@ -54,9 +54,18 @@ class RecordUserHourly extends Command
                 $this->userRepository->updateOrCreateUser($value);
             }
 
-            $grouped_gender = collect($users['results'])->groupBy('gender')->all();
-            $male_count = array_key_exists('male', $grouped_gender) ? count($grouped_gender['male']) : 0;
-            $female_count = array_key_exists('female', $grouped_gender) ? count($grouped_gender['female']) : 0;
+            $grouped_gender = $this->userRepository->getUserByGender();
+            $male_count = 0;
+            $female_count = 0;
+            foreach ($grouped_gender as $value) {
+                if ($value->Gender === 'male') {
+                    $male_count = $value->count;
+                }
+
+                if ($value->Gender === 'female') {
+                    $female_count = $value->count;
+                }
+            }
 
             Redis::set('male:count', $male_count);
             Redis::set('female:count', $female_count);
