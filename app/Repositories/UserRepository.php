@@ -33,4 +33,9 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->model->select('Gender', DB::raw('avg(age) as avg_age'))->groupBy('Gender')->get();
     }
+
+    public function getAllUsers()
+    {
+        return $this->model->paginate(10);
+    }
 }
