@@ -27,14 +27,14 @@ class UserController extends Controller
             return $currentPage;
         });
 
-        $data = $this->userRepository->getAllUsers();
+        $data = $this->userRepository->getAllUsers($request->search['value']);
         $data->transform(function($item){
             return [
-                "{$item->Name['first']} {$item->Name['last']}",
+                $item->fullname,
                 $item->age,
                 $item->Gender,
                 $item->created_at,
-                ""
+                '<button type="button" class="btn btn-danger btn-sm">Delete</button>'
             ];
         });
 

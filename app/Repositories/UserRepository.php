@@ -34,8 +34,18 @@ class UserRepository implements UserRepositoryInterface
         return $this->model->select('Gender', DB::raw('avg(age) as avg_age'))->groupBy('Gender')->get();
     }
 
-    public function getAllUsers()
+    public function getAllUsers($search)
     {
-        return $this->model->paginate(10);
+        $fullNameQuery = "TRIM('\"' FROM CONCAT(\"Name\"->>'first', ' ', \"Name\"->>'last'))";
+        $query = $this->model->select(
+            DB::raw("$fullNameQuery AS fullName"), 
+            'Gender',
+            'age',
+            'created_at'
+        );
+        if ($search) {
+            $query = $query->where(DB::raw($fullNameQuery), 'ilike', "%$search%");
+        }
+        return $query->paginate(10);
     }
 }
