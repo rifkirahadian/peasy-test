@@ -19,4 +19,9 @@ class DailyRecordRepository implements DailyRecordRepositoryInterface
             'date' => $date
         ], $data);
     }
+
+    public function getAllDailyRecord()
+    {
+        return $this->model->orderBy('id', 'desc')->get();
+    }
 }

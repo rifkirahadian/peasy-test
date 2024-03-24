@@ -9,12 +9,20 @@
     <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
 
     <script>
-        new DataTable('#example', {
-            bInfo: false,
+        new DataTable('#user-table', {
+            ordering: false,
             processing: true,
             serverSide: true,
             lengthChange: false,
             "ajax": "/user/datatable",
+        });
+
+        new DataTable('#daily-record-table', {
+            lengthChange: false,
+            bInfo: false,
+            ordering: false,
+            searching: false,
+            ajax: '/daily-record/datatable'
         });
 
         function onDelete(id, name) {
@@ -36,23 +44,50 @@
 <div class="container">
     <div class="justify-content-center">
         <div class="card">
-            <div class="card-header">User</div>
 
             <div class="card-body">
-                <table id="example" class="display" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Age</th>
-                            <th>Gender</th>
-                            <th>Created At</th>
-                            <th>  </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                </table>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">User</a>
+                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Daily Record</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <table id="user-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Gender</th>
+                                    <th>Created At</th>
+                                    <th>  </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <table id="daily-record-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Male Count</th>
+                                    <th> Female Count </th>
+                                    <th>Male Average Age</th>
+                                    <th>Female Average Age</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                
             </div>
         </div>
     </div>
