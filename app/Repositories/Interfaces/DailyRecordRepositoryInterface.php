@@ -2,5 +2,5 @@
 namespace App\Repositories\Interfaces;
 
 Interface DailyRecordRepositoryInterface {
-    public function create($data);
+    public function create($date, $data);
 }

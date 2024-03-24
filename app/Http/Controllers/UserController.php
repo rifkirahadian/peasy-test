@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\DeleteUser;
+use App\Repositories\Interfaces\DailyRecordRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -9,10 +11,12 @@ use Illuminate\Pagination\Paginator;
 class UserController extends Controller
 {
     private $userRepository;
+    private $dailyRecordRepository;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserRepositoryInterface $userRepository, DailyRecordRepositoryInterface $dailyRecordRepository)
     {
         $this->userRepository = $userRepository;
+        $this->dailyRecordRepository = $dailyRecordRepository;
     }
 
     public function index()
@@ -34,7 +38,7 @@ class UserController extends Controller
                 $item->age,
                 $item->Gender,
                 $item->created_at,
-                '<button type="button" class="btn btn-danger btn-sm">Delete</button>'
+                "<button type='button' class='btn btn-danger btn-sm' onclick='onDelete($item->id, \"$item->fullname\")'>Delete</button>"
             ];
         });
 
@@ -46,5 +50,10 @@ class UserController extends Controller
             'recordsFiltered'  => $recordsFiltered,
             'recordsTotal'  => $recordsTotal,
         ];
+    }
+
+    public function destroy($id)
+    {
+        DeleteUser::dispatch($id, $this->userRepository, $this->dailyRecordRepository);
     }
 }

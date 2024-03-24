@@ -16,6 +16,19 @@
             lengthChange: false,
             "ajax": "/user/datatable",
         });
+
+        function onDelete(id, name) {
+            const r = confirm("Are you sure want to delete " + name + "?")
+            if (r === true) {
+                $.post('/user/' + id, {
+                    _method: 'DELETE',
+                    _token: '{{ csrf_token() }}'
+                }).done(function(){
+                    console.log('deleted')
+                    window.location.reload()
+                })
+            }
+        }
     </script>
 @endsection
 

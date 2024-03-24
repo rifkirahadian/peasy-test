@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [UserController::class, 'index']);
 Route::get('user/datatable', [UserController::class, 'datatable']);
+Route::delete('user/{id}', [UserController::class, 'destroy']);

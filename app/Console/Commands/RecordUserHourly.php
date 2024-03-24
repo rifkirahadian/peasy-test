@@ -55,7 +55,7 @@ class RecordUserHourly extends Command
                 $this->userRepository->updateOrCreateUser($value);
             }
 
-            $grouped_gender = $this->userRepository->getUserCountByGender();
+            $grouped_gender = $this->userRepository->getUserCountByGender(date('Y-m-d'));
             $male_count = collect($grouped_gender)->firstWhere('Gender', 'male');
             $female_count = collect($grouped_gender)->firstWhere('Gender', 'female');
 
@@ -63,7 +63,7 @@ class RecordUserHourly extends Command
             Redis::set('female:count', $female_count ? $female_count->count : 0);
 
             DB::commit();
-            Log::info('Record user success');
+            Log::error("user:record|success");
         } catch (Exception $e) {
             DB::rollBack();
             $errorMessage = $e->getMessage();

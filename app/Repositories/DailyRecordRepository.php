@@ -13,8 +13,10 @@ class DailyRecordRepository implements DailyRecordRepositoryInterface
         $this->model = $model;
     }
 
-    public function create($data)
+    public function create($date, $data)
     {
-        $this->model->create($data);
+        $this->model->updateOrCreate([
+            'date' => $date
+        ], $data);
     }
 }
