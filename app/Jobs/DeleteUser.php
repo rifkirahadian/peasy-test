@@ -66,9 +66,7 @@ class DeleteUser implements ShouldQueue
                 Redis::set('female:count', $female_count);
             }
 
-            $this->dailyRecordRepository->create([
-                'date'          => $date,
-            ],[
+            $this->dailyRecordRepository->create($date, [
                 'male_count'    => $male_count,
                 'female_count'  => $female_count,
                 'male_avg_age'  => $male_avg_age ? $male_avg_age->avg_age : 0,

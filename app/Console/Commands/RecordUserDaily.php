@@ -54,9 +54,7 @@ class RecordUserDaily extends Command
             $male_count = Redis::get('male:count');
             $female_count = Redis::get('female:count');
 
-            $this->dailyRecordRepository->create([
-                'date'          => date('Y-m-d'),
-            ],[
+            $this->dailyRecordRepository->create(date('Y-m-d'),[
                 'male_count'    => $male_count,
                 'female_count'  => $female_count,
                 'male_avg_age'  => $male_avg_age ? $male_avg_age->avg_age : 0,
